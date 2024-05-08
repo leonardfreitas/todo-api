@@ -1,10 +1,11 @@
 import express from 'express'
 
-const app = express()
+import { routes } from './routes'
 
-app.get('/', (req, res) => {
-    return res.json({ 'message': 'Hello World' })
-})
+const app = express()
+app.use(express.json())
+
+app.use('/api/v1', routes)
 
 app.listen(8000, () => {
     console.log('SERVER UP')
