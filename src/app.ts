@@ -7,6 +7,4 @@ app.use(express.json())
 
 app.use('/api/v1', routes)
 
-app.listen(8000, () => {
-    console.log('SERVER UP')
-})
+export { app }
