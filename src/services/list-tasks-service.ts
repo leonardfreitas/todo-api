@@ -1,3 +1,4 @@
+import { Task } from "models/task-model"
 import { TasksRepository } from "../repositories/tasks-repository"
 
 export class ListTasksService {
@@ -7,8 +8,8 @@ export class ListTasksService {
         this.tasksRepository = new TasksRepository()
     }
 
-    public exec(): any {
-        const tasks = this.tasksRepository.listAll()
+    public async exec(): Promise<Task[]> {
+        const tasks = await this.tasksRepository.listAll()
         return tasks
     }
 }

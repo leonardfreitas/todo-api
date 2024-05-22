@@ -1,23 +1,38 @@
 import { v4 as uuidv4 } from 'uuid'
 
-import { tasks } from "../config/database";
 import { Task } from '../models/task-model';
+import { PrismaClient } from '@prisma/client';
 
 export class TasksRepository {
-    public listAll(): Task[] {
+    private prisma: PrismaClient = new PrismaClient()
+
+    public async listAll(): Promise<Task[]> {
+        const tasks = await this.prisma.task.findMany()
         return tasks
     }
 
-    public getById(id: string): Task {
-        const task = tasks.find((t) => t.id === id)
+    public async getById(id: number): Promise<Task> {
+        const task = await this.prisma.task.findUnique({
+            where: { id: id }
+        })
         return task
     }
 
-    public create(name: string): Task {
-        const task = { id: uuidv4(), name: name }
-
-        tasks.push(task)
+    public async create(name: string): Promise<Task> {
+        const task = await this.prisma.task.create({
+            data: {
+                name
+            }
+        })
 
         return task
+    }
+
+    public async findByName(name: string): Promise<Task[]> {
+        const tasks = await this.prisma.task.findMany({
+            where: { name: name }
+        })
+
+        return tasks
     }
 }

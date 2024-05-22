@@ -1,3 +1,4 @@
+import { Task } from "../models/task-model"
 import { TasksRepository } from "../repositories/tasks-repository"
 
 export class CreateTaskService {
@@ -7,11 +8,18 @@ export class CreateTaskService {
         this.tasksRepository = new TasksRepository()
     }
 
-    public exec(name: string): any {
+    public async exec(name: string): Promise<Task> {
         if (!name) {
             return undefined
         }
-        const task = this.tasksRepository.create(name)
+
+        const tasks = await this.tasksRepository.findByName(name)
+
+        if (tasks.length >= 2) {
+            return undefined
+        }
+
+        const task = await this.tasksRepository.create(name)
         return task
     }
 }
